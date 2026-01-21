@@ -1,0 +1,22 @@
+- hosts: web
+  become: yes
+  tasks:
+    - name: Install docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Run container
+      docker_container:
+        name: rest-app
+        image: ghcr.io/asenovakristiana/devops-101.smartcicd-simple-rest-docker-terraform-ansible/rest-app:latest
+        state: started
+        restart-policy: always
+        published_ports:
+          - "80:80"
